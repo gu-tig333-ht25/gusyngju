@@ -28,7 +28,7 @@ class ToDoItem extends StatelessWidget {
                 ),
               ),
               IconButton(
-                onPressed: null,
+                onPressed: () {},
                 icon: Icon(
                   Icons.close,
                   size: 30,

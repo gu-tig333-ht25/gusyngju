@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:template/models/todo.dart';
+import 'package:template/screens/add_item.dart';
 import 'package:template/widgets/todo_item.dart';
+
+enum FilterOption { all, done, todo }
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({super.key, required this.title});
@@ -21,6 +24,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  FilterOption activeFilter = FilterOption.values.first; // Default to all
+
   List<ToDo> toDoList = [
     ToDo(title: "Write a book"),
     ToDo(title: "Do homework"),
@@ -32,13 +37,19 @@ class _MyHomePageState extends State<MyHomePage> {
     ToDo(title: "Meditate"),
   ];
 
-  void _incrementCounter() {
+  void _addItem() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
+      Navigator.push(
+        context,
+        MaterialPageRoute<void>(
+          builder: (context) => AddItemScreen(title: widget.title),
+        ),
+      );
     });
   }
 
@@ -59,14 +70,43 @@ class _MyHomePageState extends State<MyHomePage> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
+        centerTitle: true,
         actions: [
-          IconButton(
-            onPressed: null,
+          PopupMenuButton<FilterOption>(
+            initialValue: activeFilter,
+            onSelected: (FilterOption item) {
+              setState(() {
+                activeFilter = item;
+              });
+            },
             icon: Icon(
               Icons.more_vert_rounded,
               size: 30,
               color: Theme.of(context).colorScheme.primary,
             ),
+            tooltip: "Select filter",
+            itemBuilder: (context) => FilterOption.values.map((option) {
+              return PopupMenuItem<FilterOption>(
+                value: option,
+                child: Text(option.name),
+              );
+            }).toList(),
+
+            // (BuildContext context) =>
+            // <PopupMenuEntry<FilterOption>>[
+            //   const PopupMenuItem<FilterOption>(
+            //     value: FilterOption.all,
+            //     child: Text("All"),
+            //   ),
+            //   const PopupMenuItem<FilterOption>(
+            //     value: FilterOption.done,
+            //     child: Text('Item 2'),
+            //   ),
+            //   const PopupMenuItem<FilterOption>(
+            //     value: FilterOption.todo,
+            //     child: Text('Item 3'),
+            //   ),
+            // ],
           ),
         ],
       ),
@@ -100,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: _addItem,
         tooltip: 'Add item ToDo',
         shape: CircleBorder(),
         child: Icon(Icons.add, size: 50, color: Theme.of(context).primaryColor),

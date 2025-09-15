@@ -34,7 +34,11 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
   Widget build(BuildContext context) {
     List<ToDo> toDoList = ref.watch(todoProvider);
 
-    List<ToDo> toDoListToDisplay = toDoList;
+    List<ToDo> toDoListToDisplay = activeFilter == FilterOption.done
+        ? toDoList.where((item) => item.complete).toList()
+        : activeFilter == FilterOption.todo
+        ? toDoList.where((item) => !item.complete).toList()
+        : toDoList;
 
     return Scaffold(
       appBar: AppBar(

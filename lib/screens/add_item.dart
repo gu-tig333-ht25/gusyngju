@@ -35,28 +35,30 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
               ),
             ),
 
-            SizedBox(height: 40),
+            Padding(
+              padding: const EdgeInsets.only(top: 40),
+              child: TextButton.icon(
+                onPressed: () {
+                  String title = controller.text.trim();
+                  if (title.isNotEmpty) {
+                    ToDo newToDo = ToDo(title: title);
+                    ref.read(todoProvider.notifier).add(newToDo);
+                    Navigator.pop(context);
+                  }
+                },
+                label: Text(
+                  "ADD",
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
 
-            TextButton.icon(
-              onPressed: () {
-                String title = controller.text.trim();
-                if (title.isNotEmpty) {
-                  ToDo newToDo = ToDo(title: title);
-                  ref.read(todoProvider.notifier).add(newToDo);
-                  Navigator.pop(context);
-                }
-              },
-              label: Text(
-                "ADD",
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+                icon: Icon(
+                  Icons.add,
+                  size: 22,
                   color: Theme.of(context).primaryColor,
                 ),
-              ),
-              icon: Icon(
-                Icons.add,
-                size: 22,
-                color: Theme.of(context).primaryColor,
               ),
             ),
           ],

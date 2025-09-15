@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:template/models/todo.dart';
+import 'package:template/providers/todo_provider.dart';
 import 'package:template/screens/add_item.dart';
 import 'package:template/widgets/todo_item.dart';
 
 enum FilterOption { all, done, todo }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends ConsumerStatefulWidget {
   MyHomePage({super.key, required this.title});
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -20,22 +22,11 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  ConsumerState<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends ConsumerState<MyHomePage> {
   FilterOption activeFilter = FilterOption.values.first; // Default to all
-
-  List<ToDo> toDoList = [
-    ToDo(title: "Write a book"),
-    ToDo(title: "Do homework"),
-    ToDo(title: "Tidy room", complete: true),
-    ToDo(title: "Watch TV"),
-    ToDo(title: "Nap"),
-    ToDo(title: "Shop groceries"),
-    ToDo(title: "Have fun"),
-    ToDo(title: "Meditate"),
-  ];
 
   void _addItem() {
     setState(() {
@@ -55,6 +46,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    List<ToDo> toDoList = ref.watch(todoProvider);
+
+    List<ToDo> toDoListToDisplay = toDoList;
+
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -91,22 +86,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Text(option.name),
               );
             }).toList(),
-
-            // (BuildContext context) =>
-            // <PopupMenuEntry<FilterOption>>[
-            //   const PopupMenuItem<FilterOption>(
-            //     value: FilterOption.all,
-            //     child: Text("All"),
-            //   ),
-            //   const PopupMenuItem<FilterOption>(
-            //     value: FilterOption.done,
-            //     child: Text('Item 2'),
-            //   ),
-            //   const PopupMenuItem<FilterOption>(
-            //     value: FilterOption.todo,
-            //     child: Text('Item 3'),
-            //   ),
-            // ],
           ),
         ],
       ),
@@ -131,9 +110,9 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Expanded(
               child: ListView.builder(
-                itemCount: toDoList.length,
+                itemCount: toDoListToDisplay.length,
                 itemBuilder: (context, index) =>
-                    ToDoItem(todo: toDoList.elementAt(index)),
+                    ToDoItem(todo: toDoListToDisplay.elementAt(index)),
               ),
             ),
           ],

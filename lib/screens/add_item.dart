@@ -29,21 +29,22 @@ class _AddItemScreenState extends State<AddItemScreen> {
               ),
             ),
 
-            SizedBox(height: 40),
-
-            TextButton.icon(
-              onPressed: () {},
-              label: Text(
-                "ADD",
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
+            Padding(
+              padding: const EdgeInsets.only(top: 40),
+              child: TextButton.icon(
+                onPressed: () {},
+                label: Text(
+                  "ADD",
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+                icon: Icon(
+                  Icons.add,
+                  size: 22,
                   color: Theme.of(context).primaryColor,
                 ),
-              ),
-              icon: Icon(
-                Icons.add,
-                size: 22,
-                color: Theme.of(context).primaryColor,
               ),
             ),
           ],

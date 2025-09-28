@@ -3,7 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:template/screens/home.dart';
 import 'package:template/api/todo_api.dart';
-import 'package:template/screens/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

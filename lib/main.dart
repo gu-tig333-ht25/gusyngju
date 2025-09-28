@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:template/screens/home.dart';
 import 'package:template/api/todo_api.dart';
 import 'package:template/screens/home.dart';
 
@@ -15,11 +17,11 @@ void main() async {
   // Create API instance (will call register if needed)
   TodoApi(apiKey: apiKey);
 
-  runApp(MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {

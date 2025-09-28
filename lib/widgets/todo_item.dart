@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:template/models/todo.dart';
+import 'package:template/providers/todo_provider.dart';
 
-class ToDoItem extends StatelessWidget {
+class ToDoItem extends ConsumerWidget {
   final ToDo todo;
   const ToDoItem({super.key, required this.todo});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
           child: Row(
             children: [
-              Checkbox(value: todo.complete, onChanged: null),
+              Checkbox(
+                value: todo.complete,
+                onChanged: (value) =>
+                    ref.read(todoProvider.notifier).toggleDone(todo.id),
+              ),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8),
@@ -28,7 +34,9 @@ class ToDoItem extends StatelessWidget {
                 ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  ref.read(todoProvider.notifier).remove(todo.id);
+                },
                 icon: Icon(
                   Icons.close,
                   size: 30,

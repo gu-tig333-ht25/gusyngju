@@ -1,32 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:template/models/todo.dart';
+import 'package:template/providers/todo_provider.dart';
 import 'package:template/screens/add_item.dart';
 import 'package:template/widgets/todo_item.dart';
 
 enum FilterOption { all, done, todo }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends ConsumerStatefulWidget {
   MyHomePage({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  ConsumerState<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends ConsumerState<MyHomePage> {
   FilterOption activeFilter = FilterOption.values.first; // Default to all
-
-  List<ToDo> toDoList = [
-    ToDo(title: "Write a book"),
-    ToDo(title: "Do homework"),
-    ToDo(title: "Tidy room", complete: true),
-    ToDo(title: "Watch TV"),
-    ToDo(title: "Nap"),
-    ToDo(title: "Shop groceries"),
-    ToDo(title: "Have fun"),
-    ToDo(title: "Meditate"),
-  ];
 
   void _addItem() {
     setState(() {
@@ -41,6 +32,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    List<ToDo> toDoList = ref.watch(todoProvider);
+
+    List<ToDo> toDoListToDisplay = activeFilter == FilterOption.done
+        ? toDoList.where((item) => item.complete).toList()
+        : activeFilter == FilterOption.todo
+        ? toDoList.where((item) => !item.complete).toList()
+        : toDoList;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -72,9 +71,9 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Expanded(
           child: ListView.builder(
-            itemCount: toDoList.length,
+            itemCount: toDoListToDisplay.length,
             itemBuilder: (context, index) =>
-                ToDoItem(todo: toDoList.elementAt(index)),
+                ToDoItem(todo: toDoListToDisplay.elementAt(index)),
           ),
         ),
       ),

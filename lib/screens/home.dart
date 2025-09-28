@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:template/api/todo_api.dart';
 import 'package:template/models/todo.dart';
 import 'package:template/screens/add_item.dart';
 import 'package:template/widgets/todo_item.dart';
@@ -47,6 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
         centerTitle: true,
         actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.app_registration)),
           PopupMenuButton<FilterOption>(
             initialValue: activeFilter,
             onSelected: (FilterOption item) {

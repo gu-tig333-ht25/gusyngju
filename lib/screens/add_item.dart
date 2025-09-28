@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:template/models/todo.dart';
+import 'package:template/providers/todo_provider.dart';
 
-class AddItemScreen extends StatefulWidget {
+class AddItemScreen extends ConsumerStatefulWidget {
   const AddItemScreen({super.key, required this.title});
 
   final String title;
 
   @override
-  State<AddItemScreen> createState() => _AddItemScreenState();
+  ConsumerState<AddItemScreen> createState() => _AddItemScreenState();
 }
 
-class _AddItemScreenState extends State<AddItemScreen> {
+class _AddItemScreenState extends ConsumerState<AddItemScreen> {
   @override
   Widget build(BuildContext context) {
+    TextEditingController controller = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -23,6 +28,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
         child: Column(
           children: [
             TextField(
+              controller: controller,
               decoration: InputDecoration(
                 hintText: "What are you going to do?",
                 border: OutlineInputBorder(),
@@ -32,11 +38,19 @@ class _AddItemScreenState extends State<AddItemScreen> {
             Padding(
               padding: const EdgeInsets.only(top: 40),
               child: TextButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  String title = controller.text.trim();
+                  if (title.isNotEmpty) {
+                    ToDo newToDo = ToDo(title: title);
+                    ref.read(todoProvider.notifier).add(newToDo);
+                    Navigator.pop(context);
+                  }
+                },
                 label: Text(
                   "ADD",
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     fontWeight: FontWeight.bold,
+
                     color: Theme.of(context).primaryColor,
                   ),
                 ),

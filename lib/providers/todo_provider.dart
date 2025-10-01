@@ -1,38 +1,38 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
+import 'package:template/api/todo_api.dart';
 import 'package:template/models/todo.dart';
 
 class ToDoNotifier extends StateNotifier<List<ToDo>> {
-  ToDoNotifier()
-    : super([
-        ToDo(title: "Write a book"),
-        ToDo(title: "Do homework"),
-        ToDo(title: "Tidy room", complete: true),
-        ToDo(title: "Watch TV"),
-        ToDo(title: "Nap"),
-        ToDo(title: "Shop groceries"),
-        ToDo(title: "Have fun"),
-        ToDo(title: "Meditate"),
-      ]);
+  final TodoApi _api;
 
-  void add(ToDo todo) {
-    state = [...state, todo];
+  ToDoNotifier(this._api) : super([]) {
+    _loadFromAPI();
   }
 
-  void remove(String id) {
-    state = state.where((item) => item.id != id).toList();
+  /// Private async method to fetch todos after initialization
+  Future<void> _loadFromAPI() async {
+    final todos = await _api.readToDos();
+    state = todos;
   }
 
-  void toggleDone(String id) {
-    state = state.map((todo) {
-      if (todo.id == id) {
-        return ToDo(id: todo.id, title: todo.title, complete: !todo.complete);
-      }
-      return todo;
-    }).toList();
+  void add(String title) async {
+    // Call API, responds with new list
+    state = await _api.createToDo(title);
+  }
+
+  void remove(String id) async {
+    // Call API, then remove as before
+    state = await _api.deleteToDo(id);
+  }
+
+  void toggleDone(ToDo todo) async {
+    // Call update
+    state = await _api.updateToDo(
+      ToDo(id: todo.id, title: todo.title, complete: !todo.complete),
+    );
   }
 }
 
 final todoProvider = StateNotifierProvider<ToDoNotifier, List<ToDo>>((ref) {
-  return ToDoNotifier();
+  throw UnimplementedError(); // overridden in main()
 });

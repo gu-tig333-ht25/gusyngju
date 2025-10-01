@@ -41,8 +41,7 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
                 onPressed: () {
                   String title = controller.text.trim();
                   if (title.isNotEmpty) {
-                    ToDo newToDo = ToDo(title: title);
-                    ref.read(todoProvider.notifier).add(newToDo);
+                    ref.read(todoProvider.notifier).add(title);
                     Navigator.pop(context);
                   }
                 },

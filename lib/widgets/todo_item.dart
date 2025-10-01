@@ -18,7 +18,7 @@ class ToDoItem extends ConsumerWidget {
               Checkbox(
                 value: todo.complete,
                 onChanged: (value) =>
-                    ref.read(todoProvider.notifier).toggleDone(todo.id),
+                    ref.read(todoProvider.notifier).toggleDone(todo),
               ),
               Expanded(
                 child: Padding(

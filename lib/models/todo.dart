@@ -1,11 +1,15 @@
-import 'package:uuid/uuid.dart';
-import 'package:uuid/v4.dart';
-
 class ToDo {
   String id;
   String title;
   bool complete;
 
-  ToDo({String? id, required this.title, this.complete = false})
-    : id = id ?? Uuid().v4();
+  ToDo({required this.id, required this.title, this.complete = false});
+
+  Map<String, dynamic> toJson() {
+    return {"title": title, "done": complete};
+  }
+
+  factory ToDo.fromJson(Map<String, dynamic> json) {
+    return ToDo(id: json["id"], title: json["title"], complete: json["done"]);
+  }
 }

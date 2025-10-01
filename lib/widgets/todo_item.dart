@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:template/models/todo.dart';
 import 'package:template/providers/todo_provider.dart';
+import 'package:template/screens/manage_item.dart';
 
 class ToDoItem extends ConsumerWidget {
   final ToDo todo;
   const ToDoItem({super.key, required this.todo});
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
@@ -23,13 +23,24 @@ class ToDoItem extends ConsumerWidget {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8),
-                  child: Text(
-                    todo.title,
-                    style: todo.complete
-                        ? Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            decoration: TextDecoration.lineThrough,
-                          )
-                        : Theme.of(context).textTheme.headlineSmall,
+                  child: GestureDetector(
+                    onTap: () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (context) =>
+                              ManageItemScreen(title: "Edit TODO", todo: todo),
+                        ),
+                      ),
+                    },
+                    child: Text(
+                      todo.title,
+                      style: todo.complete
+                          ? Theme.of(context).textTheme.headlineSmall?.copyWith(
+                              decoration: TextDecoration.lineThrough,
+                            )
+                          : Theme.of(context).textTheme.headlineSmall,
+                    ),
                   ),
                 ),
               ),

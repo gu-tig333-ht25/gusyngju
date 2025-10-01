@@ -31,6 +31,10 @@ class ToDoNotifier extends StateNotifier<List<ToDo>> {
       ToDo(id: todo.id, title: todo.title, complete: !todo.complete),
     );
   }
+
+  void update(ToDo todo) async {
+    state = await _api.updateToDo(todo);
+  }
 }
 
 final todoProvider = StateNotifierProvider<ToDoNotifier, List<ToDo>>((ref) {
